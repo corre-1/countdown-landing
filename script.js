@@ -1,20 +1,25 @@
-const targetDate = new Date("2025-07-01T00:00:00").getTime();
+let countdownTime = 15 * 60; // 15 minutos en segundos
 
-const countdown = setInterval(() => {
-    const now = new Date().getTime();
-    const distance = targetDate - now;
+function startCountdown() {
+    let remaining = countdownTime;
+    const countdownElement = document.getElementById("countdown");
 
-    if (distance <= 0) {
-        clearInterval(countdown);
-        document.getElementById("countdown").textContent = "¡Tiempo agotado!";
-        return;
+    function updateCountdown() {
+        const minutes = Math.floor((remaining % 3600) / 60);
+        const seconds = remaining % 60;
+
+        countdownElement.textContent = 
+            `00 : ${String(minutes).padStart(2, '0')} : ${String(seconds).padStart(2, '0')}`;
+
+        remaining--;
+
+        if (remaining < 0) {
+            remaining = countdownTime;
+        }
     }
 
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+}
 
-    document.getElementById("countdown").textContent =
-        `${days}d ${hours}h ${minutes}m ${seconds}s`;
-}, 1000);
+startCountdown();
